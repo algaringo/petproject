@@ -1,0 +1,49 @@
+
+{% extends "carmechanic/layout.html" %}
+{% load crispy_forms_tags %}
+{% block body %}
+{% load static %} 
+<div class="container">
+  <div class="container">
+      <div class="row">
+          <div class="col-md-6 col-md-offset-3 body-main col-lg-12 col-xl-12">
+              <div class="col-md-8 col-lg-12">
+                <br> <br>
+                  <div class="row">
+                      <div class="col-md-8 col-lg-12 text-center">
+                          <h2>NOTIFICATIONS</h2>
+                      </div>
+                  </div> <br />
+
+                  {% for object in object %}
+                  <div >
+                    
+                            <div class="col-lg-12 col-md-12 mb-12">
+                                <div class="card">
+                                    <div class="card-body">
+
+                                        <p class="card-text" style="margin: 5px">
+                                                <span style="color: green;  font-size:big;font-weight: bold"> {{ object.title }} </span> | 
+                                                <span style="font-size:small;"> {{ object.created }}  </span> 
+                                            <br/> 
+                                                <span> {{ object.content }}  </span> 
+                                            
+                                            </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    {% endfor %}
+
+                    <br>
+
+
+                   
+              </div>
+          </div>
+
+      </div>
+  </div>
+</div>
+{% endblock %}

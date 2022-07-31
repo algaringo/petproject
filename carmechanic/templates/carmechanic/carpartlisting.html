@@ -1,0 +1,80 @@
+{% extends "carmechanic/layout.html" %}
+
+{% load crispy_forms_tags %}
+{% block body %}
+{% load static %} 
+
+<div class="container" style="margin: 100px auto">
+
+    <div class="row"> 
+
+    <!-- LEFT COLUMN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <div class="col-md-7">
+
+        <!-- IMAGE OF ITEM -->
+
+              {% if object.images %}
+                    <img class="img-fluid rounded mb-3 mb-md-0" src="{{ object.images }}" style="width:80%;margin:50px;border:10px" class="ml-lg-5 order-1 order-lg-2" alt="No Image Available for {{ object.productnames}}">
+              {% else %}
+                    <img class="img-fluid rounded mb-3 mb-md-0" src="https://vcunited.club/wp-content/uploads/2020/01/No-image-available-2.jpg" style="width:80%;margin:50px;border:10px" alt="No-Image-Available"> 
+              {% endif %}
+              <br/><br/><br/>
+        </div>
+
+    <!-- RIGHT COLUMN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <div class="col-md-5">
+            <h1 style="margin-bottom: 30px; word-wrap: break-word;">{{ object.productnames }}</h1>
+
+        <!-- PRODUCT DETAILS -->
+              <dl class="row">
+                <dt class="col-sm-4 mb-3 d-block text-muted">Price: </dt>
+                <dd class="col-sm-8"> <strong> ₱{{ object.prices }} </strong> </dd>
+
+                <dt class="col-sm-4 mb-3 d-block text-muted">Description: </dt>
+                <dd class="col-sm-8"> {{ object.descriptions }} </dd>
+
+                <dt class="col-sm-4 mb-3 d-block text-muted">Date Posted:</dt>
+                <dd class="col-sm-8"> {{ object.created }} </dd>
+              </dl>
+
+        <!-- ERROR ALERT -->
+            {% if error %}
+             <br />
+                <center class="alert alert-danger" style="margin-bottom:10px; height:30px; line-height:30px; padding:0px 15px;" role="alert">
+                    {{error}}
+                </center>
+            {% endif %}
+            {% if success %}
+             <br />
+                <center class="alert alert-success" style="margin-bottom:10px; height:30px; line-height:30px; padding:0px 15px;" role="alert">
+                    {{success}}
+                </center>
+            {% endif %} 
+
+      <!-- CART -->
+          <br />
+              {% if user.username %}
+              {% if addedtowishlist%}
+                <a href="{% url 'removetowishlist' object.id %}"><button class="btn btn-danger btn-lg btn-primary btn-block text-uppercase" style=" color: #51624F; font-size: 80%; border-radius: 5rem; letter-spacing: .1rem; font-weight: bold;padding: 1rem;transition: all 0.2s;">
+                          Remove from Wishlist</button></a>
+              {% else %}
+                <a href="{% url 'addtowishlist' object.id %}"><button class="btn btn-success btn-lg btn-primary btn-block text-uppercase" style="font-size: 80%; border-radius: 5rem; letter-spacing: .1rem; font-weight: bold;padding: 1rem;transition: all 0.2s;">
+                          Add to Wishlist</button></a>
+              {% endif %}         
+
+              <br>
+
+              {% if addedtocart%}
+                <a href="{% url 'removetocart' object.id %}"><button class="btn btn-danger btn-lg btn-primary btn-block text-uppercase" style=" color: #51624F; font-size: 80%; border-radius: 5rem; letter-spacing: .1rem; font-weight: bold;padding: 1rem;transition: all 0.2s;">
+                          Remove from Cart</button></a>
+              {% else %}
+                <a href="{% url 'addtocart' object.id %}"><button class="btn btn-success btn-lg btn-primary btn-block text-uppercase" style="font-size: 80%; border-radius: 5rem; letter-spacing: .1rem; font-weight: bold;padding: 1rem;transition: all 0.2s;">
+                          Add to Cart</button></a>
+              {% endif %}
+              {% endif %} 
+        </div>
+    </div>
+</div>  
+
+
+{% endblock %}

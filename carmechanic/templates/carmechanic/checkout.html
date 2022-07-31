@@ -1,0 +1,101 @@
+<head>
+    <title>{% block title %}Car Maintenance App{% endblock %}</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+  <link rel="stylesheet" href="../../static/carmechanic/css/style.css">
+
+  </head>
+
+{% load crispy_forms_tags %}
+{% block body %}
+{% load static %} 
+<div class="container">
+  <div class="container">
+      <div class="row">
+          <div class="col-md-6 col-md-offset-3 body-main col-lg-12 col-xl-12">
+              <div class="col-md-8 col-lg-12">
+                <br> <br>
+                  <div class="row">
+                      <div class="col-md-8 col-lg-12 text-center">
+                          <h2>SUCCESSFULLY CHECKED OUT THE ITEMS!</h2>
+                      </div>
+                  </div> <br />
+
+                  {% for object in object %}
+                  <div >
+                    
+                            <div class="col-lg-12 col-md-12 mb-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                            <p class="card-text" style="margin: 5px"> 
+                   
+                                                <span style="color: green; font-weight: bold" > {{ object.productnames }}  </span> 
+                                            <br/> 
+                                            <span> 
+                                                ₱{{object.prices}} 
+                                            </span> 
+                                            </p>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    {% endfor %}
+                  
+                    <div>
+                        <table class="table">
+                            <thead>
+              
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-right">
+                                        <p> <strong>Shipping Fee:</strong> </p>
+                                        <p> <strong>Summary: </strong> </p>
+                                    </td>
+                                    <td class="text-left">
+                                        <p> <strong> ₱ 50.00 </strong> </p>
+                                        <p> <strong> ₱ {{ totalCart }} </strong> </p>
+                                    </td>
+                                </tr>
+                                <tr style="color: #F81D2D;">
+                                    <td class="text-right">
+                                        <h4><strong>Total:</strong></h4>
+                                    </td>
+                                    <td class="text-left">
+                                        <h4><strong><i class="fas fa-rupee-sign" area-hidden="true"></i> ₱{{ total }} </strong></h4>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-8 col-lg-12 text-center">
+                            <h6>Your order is on the way to you.</h6> <h5> Prepare exact cash for hassle free transaction. </h5>
+                            <br>
+                            <a href="{% url 'backtohome' %}">
+                                <button class="btn btn-success btn-lg btn-primary btn-block text-uppercase" style="font-size: 80%; border-radius: 5rem; letter-spacing: .1rem; font-weight: bold;padding: 1rem;transition: all 0.2s;">
+                                    Back to Home
+                                </button>
+                            </a>
+                            <br>
+                            <br>
+                        </div>
+
+
+                    </div>
+
+                   
+              </div>
+          </div>
+
+      </div>
+  </div>
+</div>
+{% endblock %}

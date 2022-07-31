@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Car Maintenance</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="../../static/carmechanic/images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../../static/carmechanic/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../../static/carmechanic/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../../static/carmechanic/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../../static/carmechanic/vendor/animate/animate.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="../../static/carmechanic/vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../../static/carmechanic/vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../../static/carmechanic/vendor/select2/select2.min.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="../../static/carmechanic/vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../../static/carmechanic/css/util.css">
+	<link rel="stylesheet" type="text/css" href="../../static/carmechanic/css/main.css">
+<!--===============================================================================================-->
+</head>
+<body>
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<div class="login100-form-title" style="background-image: url(../../static/carmechanic/images/bg-01.jpg);">
+					<span class="login100-form-title-1">
+						Sign Up
+					</span>
+				</div>
+
+				{% if message %}
+					<div>{{ message }}</div>
+				{% endif %}
+
+				<form class="login100-form validate-form" action="{% url 'signup' %}" method="post">
+					{% csrf_token %}
+					<div class="wrap-input100 validate-input m-b-26" data-validate="Last Name is required">
+						<span class="label-input100">Last Name</span>
+						<input class="input100" type="text" name="last_name" placeholder="Enter Last Name">
+						<span class="focus-input100"></span>
+                    </div>
+                    <div class="wrap-input100 validate-input m-b-26" data-validate="First Name is required">
+						<span class="label-input100">First Name</span>
+						<input class="input100" type="text" name="first_name" placeholder="Enter First Name">
+						<span class="focus-input100"></span>
+                    </div>
+                    <div class="wrap-input100 validate-input m-b-26" data-validate="E-mail Address is required">
+						<span class="label-input100">E-mail Address</span>
+						<input class="input100" type="text" name="email" placeholder="Enter E-mail Address">
+						<span class="focus-input100"></span>
+                    </div>
+                    <div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
+						<span class="label-input100">Username</span>
+						<input class="input100" type="text" name="username" placeholder="Enter username">
+						<span class="focus-input100"></span>
+					</div>
+					<div class="wrap-input100 validate-input m-b-18" data-validate = "Password is required">
+						<span class="label-input100">Password</span>
+						<input class="input100" type="password" name="password" placeholder="Enter password">
+						<span class="focus-input100"></span>
+					</div>
+					<div class="wrap-input100 validate-input m-b-18" data-validate = "Password is required">
+						<span class="label-input100">Confirm Password</span>
+						<input class="input100" type="password" name="confirmation" placeholder="Confirm password">
+						<span class="focus-input100"></span>
+					</div>					
+
+					<div class="flex-sb-m w-full p-b-30">
+						<div >
+							<a href="{% url 'login' %}" class="txt1">
+								Already have an account? Click to Login.
+							</a>
+						</div>
+
+					</div>
+
+					<input class="btn btn-secondary btn-block mb-4 login-card" type="submit" value="Signup">
+				</form>
+			</div>
+		</div>
+	</div>
+	
+<!--===============================================================================================-->
+	<script src="../../static/carmechanic/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../../static/carmechanic/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../../static/carmechanic/vendor/bootstrap/js/popper.js"></script>
+	<script src="../../static/carmechanic/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../../static/carmechanic/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../../static/carmechanic/vendor/daterangepicker/moment.min.js"></script>
+	<script src="../../static/carmechanic/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+	<script src="../../static/carmechanic/vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+	<script src="../../static/carmechanic/js/main.js"></script>
+
+</body>
+</html>

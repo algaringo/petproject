@@ -1,0 +1,48 @@
+
+{% extends "carmechanic/layout.html" %}
+
+{% block body %}
+{% load static %}
+
+<!-- HEADER -->
+<div class="container">
+
+    <br/><br/>
+
+    <div style="text-align:center"> <h1> Hire a Mechanic </h1> </div>
+
+    <br/><br/>
+    
+<!-- LOOP TO OUTPUT ACTIVE LISTINGS -->
+    <div class="row text-left">
+        {% for object in object %}
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100">
+                {% if object.images %}
+                    <a  href="{% url 'mechanicpage' object.id %}">
+                        <img style="width: 100%; height: 10.3rem"  class="card-img-center" src=" {{ object.images }} ">
+                    </a>
+                {% else %}
+                    <a href="{% url 'mechanicpage' object.id %}">
+                        <img class="card-img-top" src="../../static/carmechanic/images/mechanicdefault.jfif" alt="">
+                    </a>
+                {% endif %}  
+                <div class="card-body">
+                    <div style="text-align:center"> 
+                        <h3 class="card-title"> <strong> {{ object.mechanics }} </strong> </h3>  
+                    </div>
+                    <div style="text-align:center"> 
+                        <h5 class="card-title"> {{ object.introductions }} </h5>  
+                    </div>
+                    <div style="text-align:center"> 
+                        <h8 class="card-title"> Ratings: {{ object.ratings }} </h8>  
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

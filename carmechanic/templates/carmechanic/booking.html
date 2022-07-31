@@ -1,0 +1,82 @@
+{% extends "carmechanic/layout.html" %}
+
+{% load crispy_forms_tags %}
+{% block body %}
+{% load static %} 
+<div class="container">
+  <div class="container">
+      <div class="row">
+          <div class="col-md-6 col-md-offset-3 body-main col-lg-12 col-xl-12">
+              <div class="col-md-8 col-lg-12">
+                <br> <br>
+                  <div class="row">
+                      <div class="col-md-8 col-lg-12 text-center">
+                          <h2>SUCCESSFULLY BOOKED A MECHANIC!</h2>
+                      </div>
+                  </div> <br />
+                  
+                  
+                  <div class="row text-left">
+                    
+                            <div class="col-lg-6 col-md-12">
+                                <div class="card h-100">
+                                    {% if bookmechanic.images %}
+                                            <img style="width: 100%; height: 10.3rem"  class="card-img-center" src=" {{ bookmechanic.images }} ">
+
+                                    {% else %}
+                                            <img class="card-img-top" src="../../static/carmechanic/images/mechanicdefault.jfif" alt="">
+
+                                    {% endif %}  
+                                    <div class="card-body">
+                                        <div style="text-align:center"> 
+                                            <h5 class="card-title"> {{ bookmechanic.mechanics }} </h5>  
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+            
+                    <div>
+                        <table class="table">
+                            <thead>
+              
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-right">
+                                        <p> <strong>Tax:</strong> </p>
+                                        <p> <strong>Mechanic Rates: </strong> </p>
+                                    </td>
+                                    <td class="text-left">
+                                        <p> <strong> ₱ 50.00 </strong> </p>
+                                        <p> <strong> ₱ {{bookmechanic.rates}} </strong> </p>
+                                    </td>
+                                </tr>
+                                <tr style="color: #F81D2D;">
+                                    <td class="text-right">
+                                        <h4><strong>Total:</strong></h4>
+                                    </td>
+                                    <td class="text-left">
+                                        <h4><strong><i class="fas fa-rupee-sign" area-hidden="true"></i> ₱{{ bookmechanic.rates|add:"50" }}.00 </strong></h4>
+                                    </td>
+                                </tr>
+
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    <br>
+
+                    <div class="row">
+                        <div class="col-md-8 col-lg-12 text-center">
+                            <h6>Your mechanic is on the way to you.</h6> <h5> Prepare exact cash for hassle free transaction. </h5>
+                            <br>
+                            <a href="{% url 'backtohome' %}">
+                        </div>
+                    </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+{% endblock %}

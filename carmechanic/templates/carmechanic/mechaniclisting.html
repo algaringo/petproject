@@ -1,0 +1,74 @@
+{% extends "carmechanic/layout.html" %}
+
+{% load crispy_forms_tags %}
+{% block body %}
+{% load static %} 
+
+<div class="container" style="margin: 100px auto">
+
+    <div class="row"> 
+
+    <!-- LEFT COLUMN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <div class="col-md-5">
+
+        <!-- IMAGE OF ITEM -->
+
+              {% if object.images %}
+                    <img class="img-fluid rounded mb-3 mb-md-0" src="{{ object.images }}" style="width:80%;margin:50px;border:10px" class="ml-lg-5 order-1 order-lg-2" alt="No Image Available for {{ object.productnames}}">
+              {% else %}
+                    <img class="img-fluid rounded mb-3 mb-md-0" src="../../static/carmechanic/images/mechanicdefault.jfif" style="width:80%;margin:50px;border:10px" alt="No-Image-Available"> 
+              {% endif %}
+              <br/><br/><br/>
+        </div>
+
+    <!-- RIGHT COLUMN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <div class="col-md-7">
+            <h1 style="margin-bottom: 30px; word-wrap: break-word;">{{ object.productnames }}</h1>
+
+        <!-- PRODUCT DETAILS -->
+              <dl class="row">
+                <dt class="col-sm-4 mb-3 d-block text-muted">Mechanic: </dt>
+                <dd class="col-sm-8"> <strong> {{ object.mechanics }} </strong> </dd>
+
+                <dt class="col-sm-4 mb-3 d-block text-muted">Location: </dt>
+                <dd class="col-sm-8"> <strong> {{ object.locations }} </strong> </dd>
+
+                <dt class="col-sm-4 mb-3 d-block text-muted">Rate: </dt>
+                <dd class="col-sm-8"> <strong> ₱{{ object.rates }} </strong> </dd>
+
+                <dt class="col-sm-4 mb-3 d-block text-muted">About the mechanic: </dt>
+                <dd class="col-sm-8"> {{ object.introductions }} </dd>
+
+                <dt class="col-sm-4 mb-3 d-block text-muted">Status: </dt>
+                <dd class="col-sm-8"> {{ object.status }} </dd>
+
+                <dt class="col-sm-4 mb-3 d-block text-muted">Rating: </dt>
+                <dd class="col-sm-8"> {{ object.ratings }} / 5 </dd>
+              </dl>
+
+        <!-- ERROR ALERT -->
+            {% if error %}
+             <br />
+                <center class="alert alert-danger" style="margin-bottom:10px; height:30px; line-height:30px; padding:0px 15px;" role="alert">
+                    {{error}}
+                </center>
+            {% endif %}
+            {% if success %}
+             <br />
+                <center class="alert alert-success" style="margin-bottom:10px; height:30px; line-height:30px; padding:0px 15px;" role="alert">
+                    {{success}}
+                </center>
+            {% endif %} 
+
+      <!-- BOOKING -->
+          <br />
+              {% if user.username %}
+                <a href="{% url 'bookmechanic' object.id %}"><button class="btn btn-success btn-lg btn-primary btn-block text-uppercase" style="font-size: 80%; border-radius: 5rem; letter-spacing: .1rem; font-weight: bold;padding: 1rem;transition: all 0.2s;">
+                          Book Now</button></a>
+              {% endif %} 
+        </div>
+    </div>
+</div>  
+
+
+{% endblock %}

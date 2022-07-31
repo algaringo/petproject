@@ -1,0 +1,57 @@
+{% extends "carmechanic/layout.html" %} 
+
+{% block body %}
+
+<!-- HEADER -->
+<header class="bg-secondary text-center py-5 mb-4">
+  <div class="container">
+    <h1 class="font-weight-light text-white"> WISH LIST </h1>
+  </div>
+</header>
+
+  <!-- - - - - - - -  - - - - - WATCHLIST - - - - - - - - - - - - - - -->
+
+  <!-- CONTAINER FOR WATCHLIST -->
+  <div class="container" >
+    <div class="row">
+  
+    <!-- LOOP TO SHOW WATCHLIST -->
+    {% for object in object %}
+      
+      <div class="col-xl-3 col-md-6 mb-4" >
+        <div class="card h-100 border-0 shadow" >
+              {% if object.images %}
+                  <a href="{% url 'carpartpage' object.listingid %}">
+                      <img style="width: 100%; height: 10.3rem" class="card-img-center" src="{{ object.images }}">
+                  </a>
+              {% else %}
+                  <a href="{% url 'carpartpage' object.listingid %}">
+                      <img class="card-img-top" src="https://vcunited.club/wp-content/uploads/2020/01/No-image-available-2.jpg" alt="">
+                  </a>
+              {% endif %}  
+              <div class="card-body text-center">
+                <a href="{% url 'carpartpage' object.listingid %}">
+                  <h5 class="card-title mb-0"> {{ object.productnames }} </h5>
+                </a>
+                  <div class="card-text text-black-50">
+                    ₱{{ object.prices }}
+                  </div>
+              </div>
+        </div>
+      </div>
+
+      {% empty %}
+          <center>
+              <br><br><br>
+              <img style="width: 30%; margin-top: -8% " src="https://i.ibb.co/6vbhKgQ/Pngtree-it-s-in-the-3845898.png" alt="Pngtree-it-s-in-the-3845898" border="0">
+              <h5>  Your wishlist is empty  </h5>
+          </center>
+      {% endfor %}
+      <!-- END OF LOOP TO SHOW WATCHLIST -->
+
+    </div>
+  </div>
+  <!-- END OF WATCHLIST CONTAINER -->
+
+
+{% endblock %}
