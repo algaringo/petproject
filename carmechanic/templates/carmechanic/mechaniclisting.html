@@ -9,65 +9,150 @@
     <div class="row"> 
 
     <!-- LEFT COLUMN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-        <div class="col-md-5">
+        <div class="col-md-7">
 
         <!-- IMAGE OF ITEM -->
 
               {% if object.images %}
                     <img class="img-fluid rounded mb-3 mb-md-0" src="{{ object.images }}" style="width:80%;margin:50px;border:10px" class="ml-lg-5 order-1 order-lg-2" alt="No Image Available for {{ object.productnames}}">
-              {% else %}
+              {% else %} 
                     <img class="img-fluid rounded mb-3 mb-md-0" src="../../static/carmechanic/images/mechanicdefault.jfif" style="width:80%;margin:50px;border:10px" alt="No-Image-Available"> 
               {% endif %}
               <br/><br/><br/>
+
+        <div class="comment-box">
+        <div class="container desc">
+          <div class="row" >
+            <div class="col-11">
+              
+                  <dd class="col-sm-12" style="word-wrap: break-word; margin: 20px;"> {{ object.introduction }} </dd>
+            </div>
+          </div>
         </div>
+        </div>
+        <h1 style="margin-bottom: 30px; word-wrap: break-word;"> Mechanic Near You </h1>
+
+                <!-- PRODUCT DETAILS -->
+                <dl class="row">
+                    <dt class="col-sm-4 mb-3 d-block text-muted">Mechanic: </dt>
+                    <dd class="col-sm-8"> <strong> {{ object.mechanics }} </strong> </dd>
+    
+                    <dt class="col-sm-4 mb-3 d-block text-muted">Location: </dt>
+                    <dd class="col-sm-8"> <strong> {{ object.locations }} </strong> </dd>
+    
+                    <dt class="col-sm-4 mb-3 d-block text-muted">Rate: </dt>
+                    <dd class="col-sm-8"> <strong> ₱{{ object.rates }} </strong> </dd>
+    
+                    <dt class="col-sm-4 mb-3 d-block text-muted">About the mechanic: </dt>
+                    <dd class="col-sm-8"> {{ object.introductions }} </dd>
+    
+                    <dt class="col-sm-4 mb-3 d-block text-muted">Status: </dt>
+                    <dd class="col-sm-8"> {{ object.status }} </dd>
+    
+                </dl>
+
+                        <!-- ERROR ALERT -->
+            {% if error %}
+            <br />
+               <center class="alert alert-danger" style="margin-bottom:10px; height:30px; line-height:30px; padding:0px 15px;" role="alert">
+                   {{error}}
+               </center>
+           {% endif %}
+           {% if success %}
+            <br />
+               <center class="alert alert-success" style="margin-bottom:10px; height:30px; line-height:30px; padding:0px 15px;" role="alert">
+                   {{success}}
+               </center>
+           {% endif %} 
+
+       <!-- BOOKING -->
+           <br />
+           {% if user.username %}
+               <a href="{% url 'bookmechanic' object.id %}"><button class="btn btn-success btn-lg btn-primary btn-block text-uppercase" style="font-size: 80%; border-radius: 5rem; letter-spacing: .1rem; font-weight: bold;padding: 1rem;transition: all 0.2s;">
+                       Book Now</button></a>
+           {% endif %} 
+
+
+    </div>
 
     <!-- RIGHT COLUMN - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-        <div class="col-md-7">
-            <h1 style="margin-bottom: 30px; word-wrap: break-word;">{{ object.productnames }}</h1>
+        <div class="col-md-5">
 
-        <!-- PRODUCT DETAILS -->
-              <dl class="row">
-                <dt class="col-sm-4 mb-3 d-block text-muted">Mechanic: </dt>
-                <dd class="col-sm-8"> <strong> {{ object.mechanics }} </strong> </dd>
+                <!-- RATINGS SECTION -->
+                <div class="container">
+                    <div class="row">
+                      <div class="col-11">
+                        <div class="comments">
+                            <br><br><br>
+        
+                      <br> <br>
+                        <!-- TOGGLE TO HIDE/SHOW COMMENTS -->
+                        <p>
+                          <a data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1"> 
+                          <div class="comments-details">
+                            <span class="total-comments comments-sort"> &nbsp; Comments</span>     
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-up-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                            </svg>
+                          </div>
+                          </a>
+                        </a>
+                        </p>
+        
+                        <!-- LOOP TO SHOW ALL COMMENTS -->
+                        <div class="panel-collapse collapse show" id="multiCollapseExample1">
+                            <div class="col-md-8 col-lg-12 text-left">
+                                </div>
+                                {% for object in rating reversed %}
+                                <div >
+                                        <div class="col-lg-12 col-md-12 mb-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <p class="card-text" style="margin: 5px">
+                                                        
+                                                        <!-- <span  style="color: green;  font-size:big;font-weight: bold"> {{ object.ratings }} </span>  -->
+                                                        <span  style="color: green;  font-size:big;font-weight: bold" class = "fa fa-star checked"></span>
+                                                        <br>
+                                                            <span st=yle"font-size:small"> {{ object.mechanics }} </span> 
+                                                        <br>
+                                                            <span style="font-size:small"> {{ object.content }}  </span> 
+                                                        <br>
+                                                            <span style="font-size:small">posted by: {{ object.lister }} </span> | <span style="font-size:small"> {{ object.created }} </span>
+                                                        <br>   
+                                                        </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                                {% endfor %}
 
-                <dt class="col-sm-4 mb-3 d-block text-muted">Location: </dt>
-                <dd class="col-sm-8"> <strong> {{ object.locations }} </strong> </dd>
+                        </div>
 
-                <dt class="col-sm-4 mb-3 d-block text-muted">Rate: </dt>
-                <dd class="col-sm-8"> <strong> ₱{{ object.rates }} </strong> </dd>
+                    <!-- ADD RATINGS -->
+                            
+                    {% if user.username %}
+                        <div class="comment-box add-comment">
+                            <span class="commenter-name">
+                                <form action="{% url 'createmechanicrating' object.id %}" method="post">
+                                {% csrf_token %}
+                                {{ ratingform.content|as_crispy_field }}
+                                <button type="submit" class="btn btn-default">Add Comment</button>
+                                </form>
+                            </span>
+                        </div>
+                    {% else %}
+                      
+                    {% endif %}
+        
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-                <dt class="col-sm-4 mb-3 d-block text-muted">About the mechanic: </dt>
-                <dd class="col-sm-8"> {{ object.introductions }} </dd>
 
-                <dt class="col-sm-4 mb-3 d-block text-muted">Status: </dt>
-                <dd class="col-sm-8"> {{ object.status }} </dd>
 
-                <dt class="col-sm-4 mb-3 d-block text-muted">Rating: </dt>
-                <dd class="col-sm-8"> {{ object.ratings }} / 5 </dd>
-              </dl>
-
-        <!-- ERROR ALERT -->
-            {% if error %}
-             <br />
-                <center class="alert alert-danger" style="margin-bottom:10px; height:30px; line-height:30px; padding:0px 15px;" role="alert">
-                    {{error}}
-                </center>
-            {% endif %}
-            {% if success %}
-             <br />
-                <center class="alert alert-success" style="margin-bottom:10px; height:30px; line-height:30px; padding:0px 15px;" role="alert">
-                    {{success}}
-                </center>
-            {% endif %} 
-
-      <!-- BOOKING -->
-          <br />
-              {% if user.username %}
-                <a href="{% url 'bookmechanic' object.id %}"><button class="btn btn-success btn-lg btn-primary btn-block text-uppercase" style="font-size: 80%; border-radius: 5rem; letter-spacing: .1rem; font-weight: bold;padding: 1rem;transition: all 0.2s;">
-                          Book Now</button></a>
-              {% endif %} 
         </div>
-    </div>
+      </div>
 </div>  
 
 

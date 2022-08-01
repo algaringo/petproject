@@ -6,6 +6,7 @@ urlpatterns = [
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
     path("signup", views.signup, name="signup"),
+    path("forgotpassword", views.forgotpassword, name="forgotpassword"),
     path("carparts", views.carparts, name="carparts"),
     path("mechanics", views.mechanics, name="mechanics"),
     path("userinfo", views.userinfo, name="userinfo"),
@@ -30,4 +31,10 @@ urlpatterns = [
 
     path("mechanic/<int:id>", views.mechanicpage, name="mechanicpage"),
     path("mechanic/<int:listingid>/bookmechanic", views.bookmechanic, name="bookmechanic"),
+
+    path("createapprating", views.createapprating, name="createapprating"),
+    path("viewapprating", views.viewapprating, name="viewapprating"),
+    path("createmechanicrating", views.createmechanicrating, name="createmechanicrating"),
+    path("createmechanicrating/<int:listingid>", views.createmechanicrating, name="createmechanicrating"),
+    path("viewmechanicrating", views.viewmechanicrating, name="viewmechanicrating"),
 ]

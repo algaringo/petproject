@@ -2,6 +2,10 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django import forms
 from django.utils.timezone import now
+from django.core.validators import MinValueValidator, MaxValueValidator
+
+RATING_CHOICES = zip( range(0,6), range(0,6) )
+MECHANIC_RATING_CHOICES = zip( range(0,6), range(0,6) )
 
 # Create your models here.
 class User(AbstractUser):
@@ -104,14 +108,26 @@ class Transaction(models.Model):
         return f"{self.listingid}"
 
 class AppRating(models.Model): 
-    ratings = models.IntegerField(max_length=50, blank=True, null=True)
+    lister = models.CharField(max_length=50, blank=True, null=True)
+    ratings = models.IntegerField(choices=RATING_CHOICES, blank=True, null=True)
     title = models.CharField(max_length=50, blank=True, null=True)
     content = models.TextField(max_length=500, blank=True, null=True)
-    lister = models.CharField(max_length=50, blank=True, null=True)
-    created = models.DateTimeField(default=now, editable=False)
+    created = models.DateTimeField(default=now, editable=True)
+    listingid = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
-        return self.productnames
+        return f"{self.listingid}"
+
+class MechanicRating(models.Model): 
+    lister = models.CharField(max_length=50, blank=True, null=True)
+    mechanics = models.TextField(max_length=50, blank=True, null=True)
+    ratings = models.IntegerField(choices=MECHANIC_RATING_CHOICES, blank=True, null=True)
+    content = models.TextField(max_length=500, blank=True, null=True)
+    created = models.DateTimeField(default=now, editable=True)
+    listingid = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.listingid}"
 
 class Notification(models.Model):
     title= models.CharField(max_length=30)
@@ -121,3 +137,27 @@ class Notification(models.Model):
 
     def __str__(self):
         return self.title
+
+class UserPassword(models.Model):
+    usernames =  models.CharField(max_length=30)
+    firstname = models.CharField(max_length=30, blank=False, null=False)
+    lastname = models.CharField(max_length=30, blank=False, null=False)
+    password1 = models.CharField(max_length=30, blank=False, null=False)
+    newpassword = models.CharField(max_length=30, blank=True, null=True)
+    security1 = models.CharField(max_length=30, blank=False, null=False)
+    security2 = models.CharField(max_length=30, blank=False, null=False)
+    security3 = models.CharField(max_length=30, blank=False, null=False)
+
+    def __str__(self):
+        return self.usernames
+
+class ForgotPassword(models.Model):
+    usernames =  models.CharField(max_length=30)
+    oldpassword = models.CharField(max_length=30, blank=True, null=True)
+    newpassword = models.CharField(max_length=30, blank=True, null=True)
+    security1 = models.CharField(max_length=30, blank=False, null=False)
+    security2 = models.CharField(max_length=30, blank=False, null=False)
+    security3 = models.CharField(max_length=30, blank=False, null=False)
+
+    def __str__(self):
+        return self.usernames

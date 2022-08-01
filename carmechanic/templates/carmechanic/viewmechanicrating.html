@@ -1,0 +1,147 @@
+
+{% extends "carmechanic/layout.html" %}
+{% load crispy_forms_tags %}
+{% block body %}
+{% load static %} 
+<div class="container">
+  <div class="container">
+      <div class="row">
+          <div class="col-md-6 col-md-offset-3 body-main col-lg-12 col-xl-12">
+              <div class="col-md-8 col-lg-12">
+                <br> <br>
+                  <div class="row">
+                      <div class="col-md-8 col-lg-12 text-center">
+                          <h2>MECHANIC RATINGS</h2> 
+                          {{ averageapprating|floatformat:2 }} 
+                          <span  style="color: green;  font-size:big;font-weight: bold" class = "fa fa-star checked"></span>
+                      </div>
+                  </div> <br />
+
+                  <div class="col-md-8 col-lg-12 text-left">
+                    <h5>JOHN DOE</h5> 
+                    Average Rating: {{ averagejohn|floatformat:2 }} 
+                    <span  style="color: green;  font-size:big;font-weight: bold" class = "fa fa-star checked"></span>
+                 </div>
+                  {% for object in ratingjohn %}
+                  <div >
+                            <div class="col-lg-12 col-md-12 mb-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p class="card-text" style="margin: 5px">
+                                            
+                                            <span  style="color: green;  font-size:big;font-weight: bold"> {{ object.ratings }} </span> 
+                                            <span  style="color: green;  font-size:big;font-weight: bold" class = "fa fa-star checked"></span>
+                                            <br>
+                                                <span st=yle"font-size:small"> {{ object.mechanics }} </span> 
+                                            <br>
+                                                <span style="font-size:small"> {{ object.content }}  </span> 
+                                            <br>
+                                                <span style="font-size:small">posted by: {{ object.lister }} </span> | <span style="font-size:small"> {{ object.created }} </span>
+                                            <br>   
+                                            </p>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    {% endfor %}
+
+                    <br>
+
+                    
+                <div class="col-md-8 col-lg-12 text-left">
+                    <h5>JOSE RIZAL</h5> 
+                    Average Rating: {{ averagejose|floatformat:2 }} 
+                    <span  style="color: green;  font-size:big;font-weight: bold" class = "fa fa-star checked"></span>
+                 </div>
+                  {% for object in ratingjose %}
+                  <div >
+                            <div class="col-lg-12 col-md-12 mb-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p class="card-text" style="margin: 5px">
+                                            
+                                            <span  style="color: green;  font-size:big;font-weight: bold"> {{ object.ratings }} </span> 
+                                            <span  style="color: green;  font-size:big;font-weight: bold" class = "fa fa-star checked"></span>
+                                            <br>
+                                                <span st=yle"font-size:small"> {{ object.mechanics }} </span> 
+                                            <br>
+                                                <span style="font-size:small"> {{ object.content }}  </span> 
+                                            <br>
+                                                <span style="font-size:small">posted by: {{ object.lister }} </span> | <span style="font-size:small"> {{ object.created }} </span>
+                                            <br>   
+                                            </p>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    {% endfor %}
+
+                    <br>
+
+                    <div class="col-md-8 col-lg-12 text-left">
+                        <h5>SAN PEDRO</h5> 
+                        Average Rating: {{ averagepedro|floatformat:2 }} 
+                        <span  style="color: green;  font-size:big;font-weight: bold" class = "fa fa-star checked"></span>
+                     </div>
+                      {% for object in ratingpedro %}
+                      <div >
+                                <div class="col-lg-12 col-md-12 mb-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <p class="card-text" style="margin: 5px">
+                                                
+                                                <span  style="color: green;  font-size:big;font-weight: bold"> {{ object.ratings }} </span> 
+                                                <span  style="color: green;  font-size:big;font-weight: bold" class = "fa fa-star checked"></span>
+                                                <br>
+                                                    <span st=yle"font-size:small"> {{ object.mechanics }} </span> 
+                                                <br>
+                                                    <span style="font-size:small"> {{ object.content }}  </span> 
+                                                <br>
+                                                    <span style="font-size:small">posted by: {{ object.lister }} </span> | <span style="font-size:small"> {{ object.created }} </span>
+                                                <br>   
+                                                </p>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                        {% endfor %}
+    
+                        <br>
+
+                        <div class="col-md-8 col-lg-12 text-left">
+                            <h5>RYAN SOLIGUEN</h5> 
+                            Average Rating: {{ averageryan|floatformat:2 }} 
+                            <span  style="color: green;  font-size:big;font-weight: bold" class = "fa fa-star checked"></span>
+                         </div>
+                          {% for object in ratingryan %}
+                          <div >
+                                    <div class="col-lg-12 col-md-12 mb-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <p class="card-text" style="margin: 5px">
+                                                    
+                                                    <span  style="color: green;  font-size:big;font-weight: bold"> {{ object.ratings }} </span> 
+                                                    <span  style="color: green;  font-size:big;font-weight: bold" class = "fa fa-star checked"></span>
+                                                    <br>
+                                                        <span st=yle"font-size:small"> {{ object.mechanics }} </span> 
+                                                    <br>
+                                                        <span style="font-size:small"> {{ object.content }}  </span> 
+                                                    <br>
+                                                        <span style="font-size:small">posted by: {{ object.lister }} </span> | <span style="font-size:small"> {{ object.created }} </span>
+                                                    <br>   
+                                                    </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            {% endfor %}
+        
+                            <br>
+                   
+              </div>
+          </div>
+
+      </div>
+  </div>
+</div>
+{% endblock %}

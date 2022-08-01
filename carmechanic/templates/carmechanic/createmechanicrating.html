@@ -1,0 +1,32 @@
+{% extends "carmechanic/layout.html" %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+    <body >
+        <section class="get-in-touch">
+            <div class="col-md-8 col-lg-12 text-center">
+                <h2>RATE A MECHANIC</h2>
+            </div>
+            
+        <form class="row" method="post" style="margin-left: 1em">
+        {% csrf_token %}
+            <div class="form-field col-lg-8">           
+                 {{ form.mechanics|as_crispy_field }}
+            </div>
+            <div class="form-field col-lg-8 ">
+                {{ form.content|as_crispy_field }}
+            </div>
+            {{ averating }}
+            <div class="form col-lg-8 " type="number">
+                {{ form.ratings|as_crispy_field }} 
+            </div>
+            <br><br><br><br>
+            <div class="contact-form form-field col-lg-12">
+                <input class="submit-btn" type="submit" value="Submit">
+            </div>
+        </form>
+        </section>
+    </body>
+
+{% endblock %}
+

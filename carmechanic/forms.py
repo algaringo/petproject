@@ -1,18 +1,41 @@
 from django import forms
-from .models import CarPart, Checkout
+from .models import AppRating, MechanicRating, Mechanic
 
-class CarPartForm(forms.ModelForm):
+MECHANIC = Mechanic.objects.all().values_list('mechanics', 'mechanics')
+
+lists = []
+
+for item in MECHANIC:
+    lists.append(item)
+
+
+class AppRatingForm(forms.ModelForm):
     class  Meta:
-        model = CarPart
+        model = AppRating
         labels = {
-            'productnames' : 'Productname',
-            'descriptions' : 'Description',
-            'price' : 'Price',
-            'images' : 'Image URL',
+            'title' : 'Title',
+            'content' : 'Comment',
+            'ratings' : 'Rating'
         }
         fields = [
-            'productnames',
-            'descriptions',
-            'price',
-            'images',
+            'title',
+            'content',
+            'ratings'
         ]
+
+class MechanicRatingForm(forms.ModelForm):
+    class  Meta:
+        model = MechanicRating
+        labels = {
+            'mechanicrating' : 'Rating',
+            'comment' : 'Comment',
+            'mechanics' : 'Mechanic'
+        }
+        fields = [
+            'ratings',
+            'content',
+            'mechanics'
+        ]
+        widgets = {
+            'mechanics': forms.Select(choices=lists, attrs={'class': 'form-control'})
+        }

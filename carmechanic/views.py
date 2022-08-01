@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseBadRequest
@@ -10,7 +11,10 @@ from datetime import datetime
 from django.utils.timezone import now
 from django.db.models import Sum
 
-from .models import BookedMechanic, Booking, Cart, Mechanic, Notification, User, CarPart, Wishlist, Transaction, Checkout
+from carmechanic.forms import AppRatingForm, MechanicRatingForm
+
+from django.db.models import Avg
+from .models import AppRating, BookedMechanic, Booking, Cart, ForgotPassword, Mechanic, Notification, UserPassword, User, CarPart, Wishlist, Transaction, Checkout, MechanicRating
 
 # Create your views here.
 def index(request):
@@ -21,6 +25,7 @@ def login_view(request):
         # Attempt to sign user in
         username = request.POST["username"]
         password = request.POST["password"]
+
         user = authenticate(request, username=username, password=password)
 
         # Check if authentication successful
@@ -40,12 +45,21 @@ def logout_view(request):
 
 def signup(request):
     if request.method == "POST":
-        first_name = request.POST["first_name"]
-        last_name = request.POST["last_name"]
         username = request.POST["username"]
         email = request.POST["email"]
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
+
+        forgotpassword = UserPassword(usernames=username)
+
+        forgotpassword.usernames = request.POST["username"]
+        forgotpassword.firstname = request.POST["first_name"]
+        forgotpassword.lastname = request.POST["last_name"]
+        forgotpassword.password1 = request.POST["password"]
+        forgotpassword.security1 = request.POST["security1"]
+        forgotpassword.security2 = request.POST["security2"]
+        forgotpassword.security3 = request.POST["security3"]
+        forgotpassword.save() 
 
         if password != confirmation:
             return render(request, "carmechanic/signup.html", {
@@ -65,7 +79,38 @@ def signup(request):
     else:
         return render(request, "carmechanic/signup.html")
 
-def carparts(request):                                                             
+def forgotpassword(request):
+    if request.method == "POST":
+
+        username = request.POST["username"]
+        password = request.POST["password"]
+
+        userpassword = UserPassword.objects.get(usernames=username)
+        forgotpassword = ForgotPassword(usernames=username)
+
+        forgotpassword.security1 = request.POST["security1"]
+        forgotpassword.security2 = request.POST["security2"]
+        forgotpassword.security3 = request.POST["security3"]
+        forgotpassword.newpassword = request.POST["password"]
+        forgotpassword.save()
+
+        
+        if ((userpassword.security1 != forgotpassword.security1) | (userpassword.security2 != forgotpassword.security2) | (userpassword.security3 != forgotpassword.security3)): 
+            return render(request, "carmechanic/forgotpassword.html", {
+                "message": "Security question is incorrect."
+            })
+        else:
+            user = User.objects.get(username__exact=username)
+            user.set_password(password)
+            user.save()
+            return render(request, "carmechanic/login.html", {
+                "message": "Password changed successfully"
+            })
+
+    else:
+        return render(request, "carmechanic/forgotpassword.html")
+
+def carparts(request):
     carpart = CarPart.objects.all()
     try:
         addtocart = Cart.objects.filter(buyer=request.user.username)
@@ -77,7 +122,7 @@ def carparts(request):
         'addtocartcount': addtocartcount
     })
 
-def mechanics(request):                                                             
+def mechanics(request):
     mechanic = Mechanic.objects.all()
     try:
         addtocart = Cart.objects.filter(buyer=request.user.username)
@@ -90,7 +135,10 @@ def mechanics(request):
     })
 
 def userinfo(request):
-    return render(request, "carmechanic/userInfo.html")
+    userinfo = UserPassword.objects.filter(usernames=request.user.username)
+    return render(request, "carmechanic/userInfo.html", {
+        'userinfo': userinfo
+    })
 
 def carpartpage(request,id):
     carpart = CarPart.objects.get(id=id)
@@ -115,7 +163,7 @@ def carpartpage(request,id):
             wishlistcount = len(cart)
         except:
             wishlistcount=None
-    else: 
+    else:
         addedtocart = False
         addedtowishlist = False
         cartcount = None
@@ -132,17 +180,41 @@ def carpartpage(request,id):
 
 def mechanicpage(request,id):
     mechanic = Mechanic.objects.get(id=id)
+    rating = MechanicRating.objects.filter(listingid=id)
+    try:
+        ratingform = MechanicRatingForm(request.POST or None)
+    except:
+        return redirect('index')
     if request.user.username:
         try:
             if Mechanic.objects.get(buyer=request.user.username, listingid=id):
                 added=True
         except:
             added = False
-    else: 
+        try:
+            ratingcount = MechanicRating.objects.filter(listingid=id)
+            ratingcount = len(ratingcount)
+        except:
+            ratingcount = len(ratingcount)
+        try:
+            if mechanic.lister == request.user.username :
+                lister = True
+            else:
+                lister = False
+        except:
+            return redirect('index')
+    else:
+        ratingcount = MechanicRating.objects.filter(listingid=id)
+        ratingcount = len(ratingcount)
         added = False
+        lister = False
     return render(request, "carmechanic/mechaniclisting.html", {
         'object': mechanic,
         'added': added,
+        'lister': lister,
+        'rating': rating,
+        'ratingcount': ratingcount,
+        'ratingform': ratingform,
         "error":request.COOKIES.get('error'),
         "success":request.COOKIES.get('success'),
     })
@@ -175,8 +247,8 @@ def removetocart(request,id):
 def cart(request):
     try:
         cart = Cart.objects.filter(buyer=request.user.username)
-        cartcount = len(cart)                #count how many rows in table Cart using len()        
-        total = sum(cart.values_list('prices', flat=True))                       
+        cartcount = len(cart)                #count how many rows in table Cart using len()
+        total = sum(cart.values_list('prices', flat=True))
     except:
         cartcount = None
         total = None
@@ -212,11 +284,11 @@ def bookmechanic(request, listingid):
         transactionhistory.created = datetime.now()
         transactionhistory.save()
 
-        
+
         return render(request,"carmechanic/booking.html",{
             'bookmechanic': bookmechanic,
             "name": name
-        })   
+        })
     else:
         return redirect('index')
 
@@ -248,7 +320,7 @@ def removetowishlist(request,id):
 def wishlist(request):
     try:
         wishlist = Wishlist.objects.filter(buyer=request.user.username)
-        wishcount = len(wishlist)                                                 #count how many rows in table Watchlist using len()                                    
+        wishcount = len(wishlist)                                                 #count how many rows in table Watchlist using len()
     except:
         wishcount = None
     return render(request, "carmechanic/wishlist.html", {
@@ -282,11 +354,11 @@ def bookmechanic(request, listingid):
         transactionhistory.created = datetime.now()
         transactionhistory.save()
 
-        
+
         return render(request,"carmechanic/booking.html",{
             'bookmechanic': bookmechanic,
             "name": name
-        })   
+        })
     else:
         return redirect('index')
 
@@ -310,13 +382,13 @@ def checkout(request):
         transactionhistory.buyer = request.user.username
         transactionhistory.created = datetime.now()
         transactionhistory.save()
-        
+
         return render(request,"carmechanic/checkout.html",{
             'object': cart,
             'checkout': checkout,
             "total": total,
             "totalCart": totalCart
-        })   
+        })
     else:
         return redirect('index')
 
@@ -330,7 +402,7 @@ def backtohome(request):
         cart.delete()
         return render(request,"carmechanic/cart.html",{
             'object': cart
-        })   
+        })
     else:
         return redirect('index')
 
@@ -344,15 +416,15 @@ def deletetransactions(request):
         cart.delete()
         return render(request,"carmechanic/transactionhistory.html",{
             'object': cart
-        })   
+        })
     else:
-        return redirect('index')        
+        return redirect('index')
 
 @login_required
 def transactionhistory(request):
     try:
         transactionhistory = Transaction.objects.filter(buyer=request.user.username)
-        transactioncount = len(transactionhistory)                                                 #count how many rows in table Watchlist using len()                                    
+        transactioncount = len(transactionhistory)                                                 #count how many rows in table Watchlist using len()
     except:
         transactioncount = None
     return render(request, "carmechanic/transactionhistory.html", {
@@ -361,7 +433,7 @@ def transactionhistory(request):
     })
 
 @login_required
-def notification(request):                                                             
+def notification(request):
     try:
         notification = Notification.objects.all()
         notificationcount=len(addtocart)
@@ -371,3 +443,128 @@ def notification(request):
         'object': notification,
         'addtocartcount': notificationcount
     })
+
+@login_required
+def createapprating(request):
+    creator = AppRating.objects.all()
+    form = AppRatingForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            now = datetime.now()                                                #save date created with current timezone
+            fs = form.save(commit=False)
+            fs.lister = request.user                                            #save info not listed at forms.py
+            fs.created = now
+            fs.save()
+        return HttpResponseRedirect(reverse('viewapprating'))
+    else:
+        return render(request, "carmechanic/createapprating.html", {
+            'form': form,
+            'creator': creator
+        })
+
+def viewapprating(request):
+    try:
+        apprating = AppRating.objects.all()
+        appratingcount=len(apprating)
+
+        averageapprating = (sum(apprating.values_list('ratings', flat=True)) / appratingcount)
+    except:
+        appratingcount=None
+        averageapprating=None
+    return render(request, "carmechanic/viewapprating.html", {
+        'object': apprating,
+        'addtocartcount': appratingcount,
+        'averageapprating': averageapprating
+    })
+
+def viewmechanicrating(request):
+    try:
+        ratingjose = MechanicRating.objects.filter(mechanics='Jose Rizal')
+        ratingjosecount=len(ratingjose)
+        averagejose= (sum(ratingjose.values_list('ratings', flat=True)) / ratingjosecount)
+    except:
+        ratingjosecount=None
+        averagejose=None
+    try:
+        ratingjohn = MechanicRating.objects.filter(mechanics='John Doe')
+        ratingjohncount=len(ratingjohn)
+        averagejohn= (sum(ratingjohn.values_list('ratings', flat=True)) / ratingjohncount)
+    except:
+        ratingjohncount=None
+        averagejohn=None
+        ratingjohn=None
+    try:
+        ratingpedro = MechanicRating.objects.filter(mechanics='San Pedro')
+        ratingpedrocount=len(ratingpedro)
+        averagepedro= (sum(ratingpedro.values_list('ratings', flat=True)) / ratingpedrocount)
+    except:
+        ratingpedro = None
+        ratingpedrocount=None
+        averagepedro=None
+    try:
+        ratingryan = MechanicRating.objects.filter(mechanics='Ryan Soliguen')
+        ratingryancount=len(ratingryan)
+        averageryan= (sum(ratingryan.values_list('ratings', flat=True)) / ratingryancount)
+    except:
+        ratingryan = None
+        ratingryancount=None
+        averageryan= None
+    return render(request, "carmechanic/viewmechanicrating.html", {
+        'ratingjohn': ratingjohn,
+        'averagejohn': averagejohn,
+        'ratingjose': ratingjose,
+        'averagejose': averagejose,
+        'ratingpedro': ratingpedro,
+        'averagepedro': averagepedro,
+        'ratingryan': ratingryan,
+        'ratingryancount': ratingryancount,
+        'averageryan': averageryan
+    })
+    
+
+# @login_required
+# def createmechanicrating(request, listingid):
+#     if request.method == "POST":
+#         mechanicratings = MechanicRating.objects.all()
+#         ratingform = MechanicRatingForm(request.POST or None)
+
+#         try:
+#             mechanic = Mechanic.objects.get(id=id)
+#             rating = MechanicRating.objects.filter(listingid=id)
+#             appratingcount=len(rating)
+
+#             averageapprating = (sum(rating.values_list('ratings', flat=True)) / appratingcount)
+
+#             mechanic.ratings = averageapprating
+#             mechanic.save()
+#         except:
+#             appratingcount=None
+#             averageapprating=None
+#         if ratingform.is_valid():
+#             now = datetime.now()
+#             fs = ratingform.save(commit=False)
+#             fs.listingid = listingid
+#             fs.lister = request.user.username
+#             fs.created = now
+#             fs.save()
+#         return redirect('mechanicpage', id=listingid)
+#     else:
+#         return redirect('index')
+
+@login_required
+def createmechanicrating(request):
+    mechanicratings = MechanicRating.objects.all()
+    ratingform = MechanicRatingForm(request.POST or None)
+    if request.method == "POST":
+        if ratingform.is_valid():
+            now = datetime.now()                                                #save date created with current timezone
+            fs = ratingform.save(commit=False)
+            fs.lister = request.user                                            #save info not listed at forms.py
+            fs.created = now
+            fs.save()
+        return HttpResponseRedirect(reverse('viewmechanicrating'))
+    else:
+        return render(request, "carmechanic/createmechanicrating.html", {
+            'form': ratingform,
+            'mechanicratings': mechanicratings
+        })
